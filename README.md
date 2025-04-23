@@ -1,15 +1,15 @@
-CPSC 471 Final Project
-Inventory Management System
+## CPSC 471 Final Project
+### Inventory Management System
 ---------------------------------------
 
-Team Members:
-1)Nisarg Bhalani
-2)Paula Almeida
-3)Ayushi Patil
+#### Team Members:
+- Nisarg Bhalani
+- Paula Almeida
+- Ayushi Patil
 
 ---------------------------------------
 
-Developed with:
+#### Developed with:
 - Django
 - MySQL
 - HTML
@@ -17,7 +17,7 @@ Developed with:
 - JavaScript
 
 ---------------------------------------
-Setup Instructions:
+#### Setup Instructions:
 
 1. Install required packages:
    - Make sure Python 3.x is installed.
@@ -60,7 +60,7 @@ Setup Instructions:
    - Visit this [link](http://127.0.0.1:8000/)
 
 ---------------------------------------
-Login Information:
+#### Login Information:
 
 - Superuser (Business Owner):
   Username: owner2
@@ -71,7 +71,7 @@ Login Information:
   Password: customer123
 
 ---------------------------------------
-Project Functionality:
+#### Project Functionality:
 
 - Business Owner logs in and is redirected to the Home Dashboard (Inventory, Supplies, Orders management).
 - Customer logs in and is redirected to the Shop Page to place orders.
@@ -80,7 +80,7 @@ Project Functionality:
 - Admin can manage products, inventory, suppliers, and shipments.
 
 ---------------------------------------
-Extra Notes:
+#### Extra Notes:
 
 - If more Business Owners are needed, create them using:
 
