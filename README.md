@@ -61,7 +61,7 @@
    - Visit this [link](http://127.0.0.1:8000/)
 
 ---------------------------------------
-#### Login Information:
+#### Login Information if using the database provided:
 
 - Superuser (Business Owner):
   - Username: owner2
