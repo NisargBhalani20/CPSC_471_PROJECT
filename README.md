@@ -21,6 +21,7 @@
 
 1. Install required packages:
    - Make sure Python 3.x is installed.
+   - Make sure SQL is installed.
    - Install Django:
      pip3 install django
    - Install MySQL client:
@@ -63,12 +64,12 @@
 #### Login Information:
 
 - Superuser (Business Owner):
-  Username: owner2
-  Password: plumber123
+  - Username: owner2
+  - Password: plumber123
 
 - Customer Account:
-  Username: customer1, customer2, customer3, customer4
-  Password: customer123
+  - Username: customer1, customer2, customer3, customer4
+  - Password: customer123
 
 ---------------------------------------
 #### Project Functionality:
