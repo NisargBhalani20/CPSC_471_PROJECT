@@ -1,0 +1,115 @@
+/* custom.css */
+
+/* Change navbar color */
+.navbar {
+    background-color: #252332 !important;
+}
+
+
+.custom-login-title {
+    color: #ff66c4; 
+}
+
+.custom-login-subtitle {
+    color: #fff9f9; 
+}
+
+
+/* Change button colors */
+.btn-primary {
+    background-color: #ff66c4 !important;
+    border-color: #ff66c4 !important;
+}
+.btn-success {
+    background-color: #ff66c4 !important;
+    border-color: #ff66c4 !important;
+}
+.btn-info {
+    background-color: #ff66c4 !important;
+    border-color: #ff66c4 !important;
+    color: #ffffff !important;
+}
+.btn-warning {
+    background-color: #ff66c4 !important;
+    border-color: #ff66c4 !important;
+    color: #ffffff !important;
+}
+.btn-secondary {
+    background-color: #ff66c4 !important;
+    border-color: #ff66c4 !important;
+}
+
+.btn-dark {
+    background-color: #ff66c4 !important;
+    border-color: #ff66c4 !important;
+}
+
+.card-header {
+    background-color: #e41d97 !important; /* New hover color for primary buttons */
+    border-color: #e41d97 !important;
+    color: #ffffff !important;
+}
+
+.card {
+    background-color: #252332 !important; /* New hover color for primary buttons */
+    border-color: #e41d97 !important;
+    color: #efb8b8 !important;
+}
+
+/* If you want to change body background or text color: */
+body {
+    background-color: #252332 !important;
+    color: #efb8b8 !important;
+}
+
+/* Normal button hover effect */
+.btn-primary:hover {
+    background-color: #252332 !important; /* New hover color for primary buttons */
+    border-color: #e41d97 !important;
+}
+
+.btn-success:hover {
+    background-color: #252332 !important; /* New hover color for primary buttons */
+    border-color: #e41d97 !important;
+}
+
+.btn-info:hover {
+    background-color: #252332 !important; /* New hover color for primary buttons */
+    border-color: #e41d97 !important;
+}
+
+.btn-warning:hover {
+    background-color: #252332 !important; /* New hover color for primary buttons */
+    border-color: #e41d97 !important;
+}
+
+.btn-secondary:hover {
+    background-color: #252332 !important; /* New hover color for primary buttons */
+    border-color: #e41d97 !important;
+}
+
+.btn-dark:hover {
+    background-color: #252332 !important; /* New hover color for primary buttons */
+    border-color: #e41d97 !important;
+}
+
+.btn {
+    transition: background-color 0.3s, border-color 0.3s !important;
+}
+
+th {
+    background-color: #252332 !important;
+    border: 1px solid #c888af;
+    border-radius: 3px;
+    color:#ffffff !important;
+}
+
+h2 {
+    color:#ff66c4;
+}
+.order-header {
+    background-color: #252332 !important;
+    border: 1px solid #c888af;
+    border-radius: 3px;
+    color:#ffffff !important;
+}

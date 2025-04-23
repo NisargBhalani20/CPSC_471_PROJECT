@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html>
+    {% load static %}
+<head>
+    <title>Place Order</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="{% static 'css/custom.css' %}" rel="stylesheet"> <!-- new css -->
+    <style>
+        .order-container {
+            border: 1px solid #e42d97;
+            background-color: #252332;
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        .product-item {
+            border-bottom: 1px solid #eee;
+            padding: 10px 0;
+        }
+        .product-item:last-child {
+            border-bottom: none;
+        }
+    </style>
+</head>
+<body>
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container-fluid">
+        <img src="{% static 'images/logo.png' %}" alt="Logo" width="100" height="100" class="d-inline-block align-text-top">
+    
+        <a class="navbar-brand" href="#">Customer Portal</a>
+        <div class="navbar-nav ms-auto">
+            <a class="btn btn-outline-light" href="{% url 'login' %}">Back to Login</a>
+        </div>
+    </div>
+</nav>
+
+<div class="container">
+    <div class="order-container">
+        <h2 class="text-center mb-4">Place Your Order</h2>
+        
+        {% if messages %}
+        <div class="messages mb-4">
+            {% for message in messages %}
+            <div class="alert {% if message.tags == 'error' %}alert-danger{% else %}alert-{{ message.tags }}{% endif %} alert-dismissible fade show" role="alert">
+                {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+        
+        <form id="order-form" method="POST">
+            {% csrf_token %}
+            <div class="row mb-4">
+                <div class="col-md-12">
+                    <h4>Customer Information</h4>
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label for="customer_name" class="form-label">Full Name</label>
+                            <input type="text" class="form-control" id="customer_name" name="customer_name" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="phone_number" class="form-label">Phone Number</label>
+                            <input type="tel" class="form-control" id="phone_number" name="phone_number" required>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row mb-4">
+                <div class="col-md-12">
+                    <h4>Available Products</h4>
+                    <div class="table-responsive">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Product Name</th>
+                                    <th>Description</th>
+                                    <th>Price</th>
+                                    <th>Quantity</th>
+                                    <th>Add to Order</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for product in products %}
+                                <tr>
+                                    <td>{{ product.name }}</td>
+                                    <td>{{ product.description }}</td>
+                                    <td>${{ product.price }}</td>
+                                    <td>
+                                        <input type="number" class="form-control quantity-input" 
+                                               id="quantity-{{ product.product_id }}" 
+                                               min="1" max="{{ product.quantity }}" value="1" style="width: 80px;">
+                                    </td>
+                                    <td>
+                                        <button type="button" class="btn btn-primary add-to-order" 
+                                                data-product-id="{{ product.product_id }}"
+                                                data-product-name="{{ product.name }}"
+                                                data-product-price="{{ product.price }}">
+                                            Add
+                                        </button>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-12">
+                    <h4>Your Order</h4>
+                    <div id="order-items">
+                        <!-- Order items will be added here dynamically -->
+                    </div>
+                    <div class="text-end mt-3">
+                        <h5>Total: $<span id="order-total">0.00</span></h5>
+                        <button type="submit" class="btn btn-success" id="place-order-btn" disabled>
+                            Place Order
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const orderItems = [];
+        const orderForm = document.getElementById('order-form');
+        const orderItemsContainer = document.getElementById('order-items');
+        const orderTotal = document.getElementById('order-total');
+        const placeOrderBtn = document.getElementById('place-order-btn');
+        const customerName = document.getElementById('customer_name');
+        const phoneNumber = document.getElementById('phone_number');
+
+        function validateForm() {
+            const hasItems = orderItems.length > 0;
+            const hasCustomerInfo = customerName.value.trim() !== '' && phoneNumber.value.trim() !== '';
+            placeOrderBtn.disabled = !(hasItems && hasCustomerInfo);
+            return hasItems && hasCustomerInfo;
+        }
+
+        customerName.addEventListener('input', validateForm);
+        phoneNumber.addEventListener('input', validateForm);
+
+        document.querySelectorAll('.add-to-order').forEach(button => {
+            button.addEventListener('click', function() {
+                const productId = this.dataset.productId;
+                const productName = this.dataset.productName;
+                const productPrice = parseFloat(this.dataset.productPrice);
+                const quantity = parseInt(document.getElementById(`quantity-${productId}`).value);
+
+                // Check if product already exists
+                const existingItemIndex = orderItems.findIndex(item => item.product_id === productId);
+
+                if (existingItemIndex !== -1) {
+                    // Update existing item's quantity
+                    orderItems[existingItemIndex].quantity = quantity;
+                    alert(`Updated quantity for ${productName} to ${quantity}`);
+                } else {
+                    // Add new item
+                    orderItems.push({
+                        product_id: productId,
+                        name: productName,
+                        price: productPrice,
+                        quantity: quantity
+                    });
+                    alert(`Added ${productName} to order`);
+                }
+
+                updateOrderDisplay();
+            });
+        });
+
+        function updateOrderDisplay() {
+            orderItemsContainer.innerHTML = '';
+            let total = 0;
+
+            orderItems.forEach((item, index) => {
+                const itemTotal = item.price * item.quantity;
+                total += itemTotal;
+
+                const itemDiv = document.createElement('div');
+                itemDiv.className = 'product-item';
+                itemDiv.innerHTML = `
+                    <div class="row align-items-center">
+                        <div class="col-md-4">${item.name}</div>
+                        <div class="col-md-2">$${item.price.toFixed(2)}</div>
+                        <div class="col-md-2">${item.quantity}</div>
+                        <div class="col-md-2">$${itemTotal.toFixed(2)}</div>
+                        <div class="col-md-2">
+                            <button type="button" class="btn btn-danger btn-sm remove-item" data-index="${index}">Remove</button>
+                        </div>
+                    </div>
+                `;
+                orderItemsContainer.appendChild(itemDiv);
+            });
+
+            // Add hidden inputs for form submission
+            orderItems.forEach(item => {
+                const hiddenProductId = document.createElement('input');
+                hiddenProductId.type = 'hidden';
+                hiddenProductId.name = 'product_ids';
+                hiddenProductId.value = item.product_id;
+                orderItemsContainer.appendChild(hiddenProductId);
+
+                const hiddenQuantity = document.createElement('input');
+                hiddenQuantity.type = 'hidden';
+                hiddenQuantity.name = 'quantities';
+                hiddenQuantity.value = item.quantity;
+                orderItemsContainer.appendChild(hiddenQuantity);
+            });
+
+            orderTotal.textContent = total.toFixed(2);
+            validateForm();
+        }
+
+        document.addEventListener('click', function(e) {
+            if (e.target.classList.contains('remove-item')) {
+                const index = parseInt(e.target.dataset.index);
+                const removedItem = orderItems[index];
+                orderItems.splice(index, 1);
+                alert(`Removed ${removedItem.name} from order`);
+                updateOrderDisplay();
+            }
+        });
+
+        orderForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            if (!validateForm()) {
+                alert('Please fill in all required fields and add at least one product to your order.');
+                return;
+            }
+
+            const formData = new FormData(this);
+            
+            // Debug logging
+            console.log('Submitting order with data:');
+            for (let [key, value] of formData.entries()) {
+                console.log(`${key}: ${value}`);
+            }
+
+            fetch(window.location.href, {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value
+                }
+            })
+            .then(response => {
+                console.log('Response status:', response.status);
+                if (response.ok || response.redirected) {
+                    alert('Your order has been successfully placed!');
+                    window.location.href = '{% url "login" %}';
+                } else {
+                    throw new Error('Order submission failed');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('There was an error submitting your order. Please try again.');
+            });
+        });
+    });
+</script>
+</body>
+</html> 

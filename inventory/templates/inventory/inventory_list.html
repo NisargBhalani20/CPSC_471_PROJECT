@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html>
+    {% load static %}
+<head>
+    <title>Inventory Management</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="{% static 'css/custom.css' %}" rel="stylesheet"> <!-- new css -->
+    <style>
+        .product-list {
+            max-height: 150px;
+            overflow-y: auto;
+            padding: 5px;
+            background-color: #f8f9fa;
+            border-radius: 4px;
+        }
+        .product-item {
+            padding: 3px 0;
+            border-bottom: 1px solid #dee2e6;
+        }
+        .product-item:last-child {
+            border-bottom: none;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="{% url 'home' %}">
+                <img src="{% static 'images/logo.png' %}" href="{% url 'home' %}" alt="Logo" width="100" height="100" class="d-inline-block align-text-center">
+                Inventory Management</a>
+            <div class="navbar-nav ms-auto">
+                <span class="navbar-text me-3">Welcome, {{ user.username }}</span>
+                <a class="btn btn-outline-light" href="{% url 'logout' %}">Logout</a>
+            </div>
+        </div>
+    </nav>
+
+<div class="container mt-5">
+    <h1 class="text-center mb-4">Inventory Locations</h1>
+    
+    <!-- Add Inventory Form -->
+    <div class="row mb-4">
+        <div class="col-md-6 mx-auto">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Add New Inventory Location</h5>
+                    <form method="POST" action="{% url 'add_inventory' %}">
+                        {% csrf_token %}
+                        <div class="mb-3">
+                            <label for="location" class="form-label">Location</label>
+                            <select class="form-select" id="location" name="location" required>
+                                <option value="">Select a location...</option>
+                                <option value="Vancouver">Vancouver</option>
+                                <option value="Calgary">Calgary</option>
+                                <option value="Toronto">Toronto</option>
+                                <option value="Montreal">Montreal</option>
+                                <option value="Halifax">Halifax</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="capacity" class="form-label">Capacity</label>
+                            <input type="number" class="form-control" id="capacity" name="capacity" required min="1">
+                        </div>
+                        <button type="submit" class="btn btn-primary">Add Location</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Inventory Table -->
+    <div class="table-responsive">
+        <table class="table table-striped table-bordered">
+            <thead class="table-dark">
+                <tr>
+                    <th>Inventory ID</th>
+                    <th>Location</th>
+                    <th>Capacity</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for inventory in inventories %}
+                <tr>
+                    <td>{{ inventory.inventory_id }}</td>
+                    <td>{{ inventory.location }}</td>
+                    <td>{{ inventory.capacity }}</td>
+                    <td>
+                        <a href="{% url 'edit_inventory' inventory.inventory_id %}" class="btn btn-sm btn-warning">Edit</a>
+                        <a href="{% url 'delete_inventory' inventory.inventory_id %}" class="btn btn-sm btn-danger">Delete</a>
+                    </td>
+                </tr>
+            {% empty %}
+                <tr>
+                    <td colspan="4" class="text-center">No inventory locations available.</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    
+    <div class="text-center mt-4">
+        <a href="{% url 'home' %}" class="btn btn-secondary">Back to Home</a>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html> 
