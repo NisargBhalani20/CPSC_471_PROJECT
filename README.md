@@ -57,7 +57,7 @@ Setup Instructions:
      python3 manage.py runserver
 
 7. Open Browser:
-   - Visit this (link)[http://127.0.0.1:8000/]
+   - Visit this [link](http://127.0.0.1:8000/)
 
 ---------------------------------------
 Login Information:
