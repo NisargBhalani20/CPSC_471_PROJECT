@@ -27,7 +27,7 @@
      pip3 install mysqlclient
 
 2. .env File Config :
-  - Setup the .env file for MySQL and Django based on the .env.example file
+  - Setup the .env file for MySQL and Django based on the .env.example file in the inventory_management_system directory
   - A Django Secret key is generated everytime a project is created
   - To generate the MySQL password, create a mySQL account and use that password
 
