@@ -87,6 +87,10 @@
 
   python3 manage.py createsuperuser
 
+- If more Customers are needed, create them using:
+
+   python3 manage.py create_customer username password
+  
 - New Products, Supplies, or Shipments can be added from the Business Owner dashboard.
 - If necessary, new users and data can be created using Django Admin Panel at:
   http://127.0.0.1:8000/admin/
